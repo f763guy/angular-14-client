@@ -1,1 +1,94 @@
-<p>tutorial-details works!</p>
+<div *ngIf="viewMode; else editable">
+  <div *ngIf="currentTutorial.id">
+    <h4>Tutorial</h4>
+    <div>
+      <label><strong>標題:</strong></label> {{ currentTutorial.title }}
+    </div>
+    <div>
+      <label><strong>敘述:</strong></label>
+      {{ currentTutorial.description }}
+    </div>
+    <div>
+      <label><strong>狀態:</strong></label>
+      {{ currentTutorial.published ? "Published" : "Pending" }}
+    </div>
+
+    <a
+      class="badge badge-warning"
+      routerLink="/tutorials/{{ currentTutorial.id }}"
+    >
+      編輯
+    </a>
+  </div>
+
+  <div *ngIf="!currentTutorial">
+    <br />
+    <p>請選擇一個Tutorial...</p>
+  </div>
+</div>
+
+<ng-template #editable>
+  <div *ngIf="currentTutorial.id" class="edit-form">
+    <h4>Tutorial</h4>
+    <form>
+      <div class="form-group">
+        <label for="title">標題:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          [(ngModel)]="currentTutorial.title"
+          name="title"
+        />
+      </div>
+      <div class="form-group">
+        <label for="description">敘述:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="description"
+          [(ngModel)]="currentTutorial.description"
+          name="description"
+        />
+      </div>
+
+      <div class="form-group">
+        <label><strong>狀態:</strong></label>
+        {{ currentTutorial.published ? "Published" : "Pending" }}
+      </div>
+    </form>
+
+    <button
+      class="badge badge-primary mr-2"
+      *ngIf="currentTutorial.published"
+      (click)="updatePublished(false)"
+    >
+      UnPublish
+    </button>
+    <button
+      *ngIf="!currentTutorial.published"
+      class="badge badge-primary mr-2"
+      (click)="updatePublished(true)"
+    >
+      Publish
+    </button>
+
+    <button class="badge badge-danger mr-2" (click)="deleteTutorial()">
+      刪除
+    </button>
+
+    <button
+      type="submit"
+      class="badge badge-success mb-2"
+      (click)="updateTutorial()"
+    >
+      修改
+    </button>
+    <p>{{ message }}</p>
+  </div>
+
+  <div *ngIf="!currentTutorial.id">
+    <br />
+    <p>無法存取這個Tutorial...</p>
+  </div>
+</ng-template>
